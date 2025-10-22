@@ -1,0 +1,73 @@
+\chapter{关于泛化的VC理论}
+
+泛化，指的是学习到的模型对于未知数据的预测能力. 半世纪前，Vapnik-Chervonenkis理论（简称VC理论）被提出，尝试从数学角度定量地刻画了所谓泛化能力. 值得一提，现如今VC理论被指出并不能完整地刻画“泛化”，即仍有该理论未囊括的额外因素，但其思想是重要且值得介绍的. 
+
+\section{机器学习的数学描述}
+
+首先介绍一个基本概念：
+\begin{definition} （模型，函数类，假设空间）
+    给定输入空间$\mathcal{X}$和输出空间$\mathcal{Y}$，那么由其确定的模型(Model)，函数类(Function Class)或假设空间(Hypothesis Space)（这三者是同义词）为 
+    \[
+    \ca{F} = \{f:\ca{X} \ra \ca{Y}\}
+    \]
+\end{definition}
+
+例如：全体二次函数、线性函数或CNN都可以叫做模型. 
+
+\medskip
+现在考虑一个简单的有监督学习的模型，有数据集$(x_1, y_1), \dots, (x_n, y_n)$，其中$x_i \in \mathcal{X}, y_i \in \mathcal{Y}$，所有数据i.i.d.且服从$D_{X,Y}$. 我们称每个$x_i$为\textbf{实例}(instance)，每个$y_i$为\textbf{标签}(label).
+
+有了数据，便要进行训练. 这里便可以看出假设空间的重要性了，我们总是在假设空间中进行学习，而非天马行空毫无约束. 记假设空间为$\ca{F}$，现在我们要选择$\hat f \in \ca F$使得其在数据集$\{(x_i, y_i)\}_{i=1}^n$上有一个较小的损失(loss)或误差(error).
+
+那么如何评判$\hat f$的好坏？一个直观上的评估就是在$D_{X,Y}$上的错误率. 
+
+\begin{definition}（训练误差） 
+    有监督学习的情况下，对于数据集$\{(x_i, y_i)\}_{i=1}^n$和假设$\hat f$，训练误差(Training Error)为
+    \[
+    \dfrac{1}{n} \sum_{i=1}^n \mathbb{I}[y_i \neq \hat f(x_i)]
+    \]
+\end{definition}
+
+\begin{definition}（泛化误差） 
+    有监督学习的情况下，设数据$(X, Y)$服从分布$D_{X,Y}$，对于假设$\hat f$，泛化误差(Generalization Error)为
+    \[
+    \Pr_{(X, Y) \sim D_{X,Y}}\left[
+        Y \neq \hat f(X)
+    \right]
+    \]
+\end{definition}
+
+自然地，我们可以得到泛化差距
+\begin{definition}
+    承之前所有记号，$\hat f$的泛化差距(Generalization Gap)为 
+    \[
+    \Pr_{(X, Y) \sim D_{X,Y}}\left[
+        Y \neq \hat f(X)
+    \right] - \dfrac{1}{n} \sum_{i=1}^n \mathbb{I}[y_i \neq \hat f(x_i)]
+    \]
+\end{definition}
+
+如果我们记$Z_i := \mathbb{I}[y_i \neq \hat f(x_i)]$以及$Z := \mathbb{I}[Y \neq \hat f(X)]$. 那么泛化差距就可以写成$\E[Z] - \frac{1}{n} \sum_i Z_i$. 由于每个$Z_i$和$Z$都服从某个Bernoulli分布，这看起来似乎就像是我们在前一章集中不等式当中描述的样子. 那么泛化差距应该随着数据集的大小$n$的增长指数级收敛至$0$. 也就意味着泛化永远成立？但事实并非如此，这个$\hat f$是由$\ca D := \{(x_i, y_i)\}_{i=1}^n$确定的，因此$\hat f$依赖于$\ca D$. 此时$Z_1, \dots, Z_n$根本不独立，甚至某些程度上正相关，因此不能应用Chernoff界. （另外，回忆一下\textbf{1.3节}中负相关才能放缩，正相关时不一定成立）
+
+接下来探讨何时泛化差距会比较小. 
+
+\section{有限大假设空间下的结果}
+
+先来考虑假设空间$\ca F$是有限集的情况（$|\ca F| < \infty$）. 请注意该情况是过于简化的，因为线性模型都是无穷集. 记$\ca F = \{f_1, \dots, f_{|\ca F|}\}$，考虑算法最差的情况下对于任意$\varepsilon > 0$
+
+\begin{align*}
+    & \Pr_{\text{worst case}} \left[
+        \Pr_{(X, Y) \sim D_{X,Y}} \left[
+            Y \neq \hat f (X)
+        \right] - \dfrac{1}{n} \sum_{i=1}^n \mathbb{I}[y_i \neq \hat f(x_i)] \ge \varepsilon
+    \right] \\
+    \le & 
+    \sum_{j=1}^{|\ca F|} \Pr\left[
+        \Pr_{(X, Y) \sim D_{X,Y}} \left[
+            Y \neq f_j (X)
+        \right] - \dfrac{1}{n} \sum_{i=1}^n \mathbb{I}[y_i \neq f_j(x_i)] \ge \varepsilon
+    \right] \\ 
+    \le & |\ca F| \cdot e^{-2n\varepsilon^2}
+\end{align*}
+
+可以看到$\ca F$有限时泛化误差总是随着$n$增大而收敛到0. 但这样的分析不足以支撑$|\ca F|$是无穷的情况，这就需要使用VC理论了.

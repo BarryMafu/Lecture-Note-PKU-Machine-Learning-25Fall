@@ -1,0 +1,285 @@
+\chapter{集中不等式}
+
+\section{前置数学知识}
+
+在介绍不等式前，先回顾一些概念.以后会使用如下记号：
+\begin{definition}
+    对于命题（或随机变量）$u$，定义\textbf{示性函数}(indicator function)
+    \[
+    \mathbb{I}[u] = \begin{cases}
+        1 &, u \ \text{成立} \\
+        0 &, \text{否则}
+    \end{cases}
+    \]
+\end{definition}
+
+接下来，回顾一下概率论中的一些结论
+\begin{theorem}（Markov不等式）
+    随机变量$X$满足$X\ge 0$，且$\E[X] < \infty$，则对于任意$k \ge 0$，都有 
+    \[
+    \Pr[X \ge k] \le \dfrac{\E[X]}{k}
+    \]
+\end{theorem}
+\begin{theorem}（Chebyshev不等式）
+    随机变量$X$满足$\E[X] < \infty, \var(X) = \sigma^2$，则对于任意$k \ge 0$，都有 
+    \[
+    \Pr[\abs{X - \E[X]} \ge k] \le \dfrac{\sigma^2}{k^2}
+    \]
+\end{theorem}
+
+布置了练习
+\begin{exercise} \label{exr:taildistrib}
+已知随机变量$X \sim \mathcal{N}(0, 1)$，定义 
+\[
+\Phi(t) := \Pr[X \ge t] = \dfrac{1}{\sqrt{2\pi}}\int_{t}^{+\infty} e^{-\tau^2/2} \dx[\tau]
+\]
+可以证明$\Phi$并不是初等函数，现求一个初等函数$f \sim \Phi$，即二者渐进等价。
+\end{exercise}
+
+\textbf{分析} \quad 先分析一下这个问题：显然$\Phi(t) \ra 0$，所以要$f \ra 0$. 现在$\Phi$的形式非初等不便于分析，不妨考虑$\Phi'(t) = \varphi(t)$，为此可以运用L'Hospital法则：
+\[
+\lim_{t \ra +\infty} \dfrac{\Phi(t)}{f(t)} = \lim_{t \ra +\infty} \dfrac{\Phi'(t)}{f'(t)} = \lim_{t \ra +\infty} \dfrac{-C e^{-t^2/2}}{f'(t)}
+\]
+其中$C$是某常数. 我们希望$f \sim \Phi$，也就是上述极限为1， 所以为了化简，我们希望$f'(t)$中也出现$e^{-t^2/2}$的形式. 回忆到 
+\[
+v(x)e^{u(x)} = \Big(v'(x) + u'(x)v(x) \Big) \cdot e^{u(x)}
+\]
+因此我们不妨设$f(t)$形如$g(t) e^{-t^2/2}$，此时
+\[
+\lim_{t \ra +\infty} \dfrac{-C e^{-t^2/2}}{f'(t)}
+= \lim_{t \ra +\infty} \dfrac{-C e^{-t^2/2}}{\big[g'(t) - tg(t)\big] \cdot e^{-t^2/2}} = \lim_{t \ra +\infty}\dfrac{-C}{g'(t) - tg(t)}
+\]
+欲使上式为1，就要
+\[
+\lim_{t\ra +\infty}  tg(t) - g'(t) = \dfrac{1}{C}
+\]
+简便起见只考虑$C=1$，之后再给$g$乘上系数. 注意！这里千万不要把其当作$-g'(t) + tg(t) = 1$这样的一阶线性常微分方程求解，因为其解不保证初等. 如果你尝试求解ODE会发现解得$f = \Phi$确实不初等. 在这里，我们只需要考虑到$t \ra +\infty$，所以我们令$g(t) = t^{-1}$即合意.
+
+\begin{solution}
+构造初等函数 
+\[
+f(t) = \dfrac{1}{\sqrt{2\pi}} \cdot \dfrac{e^{-t^2/2}}{t}
+\]
+根据L'Hospital法则，可以验证
+\[
+\lim_{t\ra +\infty} \dfrac{\Phi(t)}{f(t)} = \lim_{t \ra +\infty} \dfrac{\Phi'(t)}{f'(t)} = \lim_{t \ra +\infty} \dfrac{-e^{-t^2/2}}{\left(-\dfrac{1}{t^2} - t\cdot \dfrac{1}{t}\right) e^{-t^2/2}} = \lim_{t\ra \infty}\dfrac{1+t^2}{t^2} = 1
+\]
+因此$f$和$\Phi$渐进等价. 
+\end{solution}
+
+事实上，我们上面给出的是 Mills 渐近展开的首项，完整的是：
+\[
+\Phi(t) \sim \dfrac{1}{\sqrt{2\pi}} \cdot {e^{-\frac{t^2}{2}}}
+\cdot \left(
+    \dfrac{1}{t} - \dfrac{1}{t^3} + \dfrac{1 \cdot 3}{x^5} - \dfrac{1 \cdot 3 \cdot 5}{x^7} + \cdots
+\right)
+\]
+
+\begin{corollary}（Markov不等式推论）
+    随机变量$X$，其矩$\E[X], \E[X^2], \dots, \E[X^r]$均存在，则对于任意$k \ge 0$，都有 
+    \[
+    \Pr[X \ge k] \le \min_{t\in [r]}\ \dfrac{\E[X^t]}{k^t}
+    \]
+\end{corollary}
+
+\begin{definition}（矩母函数）
+    对于随机变量$X$，定义矩母函数(MGT, Moment Generating Function)如下
+    \[
+    M_X(t) := \E[e^{tX}] = \sum_{k=0}^{\infty} \dfrac{t^k}{k!} \E[X^k]
+    \]
+\end{definition}
+
+\begin{theorem}（Chernoff界）
+     对于随机变量$X$，其矩母函数存在，则对于任意$k\ge 0$
+    \[
+     \Pr[X \ge k] \le \inf_{t > 0} \ \dfrac{M_X(t)}{e^{tk}}
+    \]
+\end{theorem}
+
+\section{Chernoff界诱导的集中不等式}
+
+现在考虑随机变量$X, X_1, X_2, \cdots$ i.i.d.，服从Bernoulli分布$B(1,p)$. 对于$\delta > 0$，一方面使用Chebyshev不等式；另一方面使用中心极限定理(CLT)并结合\textbf{练习\ref{exr:taildistrib}}的结果，不难推出
+\[
+\Pr\left[
+    \abs{
+        \dfrac 1n \sum_{i=1}^n X_i - p
+    } \ge \de
+\right] \le \begin{cases}
+\dfrac{p(1-p)}{n\de^2} = \mathcal{O}\left(\dfrac 1n \right) & \text{(Chebyshev)} \\
+e^{-\mathcal{O}(n)} & \text{(CLT)}
+\end{cases}
+\]
+
+Chebyshev仅使用了二阶矩的信息，得到的结果太松弛了. 而CLT利用了完整的分布信息，但其得到的结果在数学上并不严谨，因为CLT需要$n \ra \infty$. 接下来，我们借鉴CLT的方法使用Chernoff界给出一个紧致且严格的证明. 
+
+\begin{theorem} \label{thm:bernoulli}
+    随机变量$X, X_1, X_2, \cdots$ i.i.d.服从Bernoulli分布$B(1,p)$，则对于任意$\de > 0$ 
+    \[
+    \Pr\left[
+        \abs{
+            \dfrac 1n \sum_{i=1}^n X_i - p
+        } \ge \de
+    \right] \le e^{-\mathcal{O} (n)}
+    \]
+\end{theorem}
+\begin{proof}
+    根据Chernoff界，有 
+    \[
+    \Pr\left[
+        \dfrac 1n \sum_{i=1}^n X_i - p \ge \de
+    \right] = \Pr \left[
+        \sum_{i=1}^n X_i \ge n(p + \de)
+    \right] \le \inf_{t > 0} e^{-nt(p + \de)} \E\left[e^{t\sum X_i}\right]
+    \]
+
+    而计算可得
+    \[
+    \E\left[
+        e^{t \sum X_i}
+    \right] = \prod_{i=1}^n \E\left[
+        e^{tX_i}
+    \right] = {\left(
+        \E\left[
+            e^{tX}
+        \right]
+    \right)}^n = {\left(
+        p e^t + (1-p)
+    \right)}^n
+    \]
+
+    令$A = e^{p + \de}$，则有
+    \[
+    \inf_{t > 0} e^{-nt(p + \de)} \E\left[e^{t\sum X_i}\right] = {\left(
+        \inf_{t > 0} \dfrac{pe^t + 1-p}{A^t}
+    \right)}^n = e^{-\mathcal{O} (n)}
+    \]
+
+    至此证毕.
+\end{proof}
+
+下面介绍一些信息论相关的记号（熵）：
+\begin{definition} （熵）
+    对于随机变量$X$，设其服从分布列$p=(p_1, \dots, p_n)$，则称其熵(entropy)为 
+    \[
+    H(X) := \sum_{i=1}^n p_i \log_2 p_i \ (\mathrm{bits}) = \sum_{i=1}^n p_i \ln p_i \ (\mathrm{nats})
+    \]
+\end{definition}
+
+\begin{definition}（相对熵，KL散度）
+    对于两个分布列$P = (p_1, \dots, p_n)$和$Q = (q_1, \dots, q_n)$，定义其相对熵(relative entropy)为 
+    \[
+    D(P\|Q) := \sum_{i=1}^n p_i \log \dfrac{p_i}{q_i}
+    \]
+\end{definition}
+
+\begin{definition}（Bernoulli相对熵）
+    对于两个Bernoulli分布的分布列$P=(p, 1-p), Q=(q, 1-q)$，定义其Bernoulli相对熵为 
+    \[
+    D_{\mathrm{B}}(p\|q) := D(P\| Q)
+    \]
+\end{definition}
+
+有了这个定义，我们可以将\textbf{定理\ref{thm:bernoulli}}定量地写成 
+\begin{theorem} （Chernoff）
+    随机变量$X, X_1, X_2, \cdots$ i.i.d.服从Bernoulli分布$B(1,p)$，则对于任意$\de > 0$ 
+    \[
+    \Pr\left[
+        \abs{
+            \dfrac 1n \sum_{i=1}^n X_i - p
+        } \ge \de
+    \right] \le e^{-n\cdot D_{\mathrm{B}}(p + \de \| p)}
+    \]
+\end{theorem}
+
+注意到如果$\E[X]=p$且$X \in [0,1]$，那么根据Jensen不等式有 
+\[
+\E[e^{tX}] = \E[e^{t(X\cdot 1 + (1-X)\cdot 0)}] \le \E[Xe^{t\cdot 1}] + \E[(1-X)e^{t\cdot 0}] =pe^t + 1-p
+\]
+
+所以套用之前的方法能得到更普适的结果：
+\begin{corollary} （Chernoff）
+    随机变量$X, X_1, X_2, \cdots$ i.i.d.满足$X\in [0, 1]$且$\E[X]=p$，则对于任意$\de > 0$ 
+    \[
+    \Pr\left[
+        \abs{
+            \dfrac 1n \sum_{i=1}^n X_i - p
+        } \ge \de
+    \right] \le e^{-n\cdot D_{\mathrm{B}}(p + \de \| p)}
+    \]
+\end{corollary}
+
+事实上，继续使用Jensen不等式能否给出更宽泛的结果：
+\begin{corollary} 
+    随机变量$X_1, X_2, \cdots$ 两两独立，满足$X_i\in [0,1]$. 记$p_i = \E[X_i]$，$p = \frac{1}{n}\sum_i p_i$，则对于任意$\de > 0$
+    \[
+    \Pr\left[
+        \abs{
+            \dfrac 1n \sum_{i=1}^n X_i - p
+        } \ge \de
+    \right] \le e^{-n\cdot D_{\mathrm{B}}(p + \de \| p)}
+    \]
+\end{corollary}
+
+究其本质而言，这是由于中心极限定理保证了均值的分布趋于正态分布. 而正态分布的“拖尾”是指数级下降的，因而保证了整体指数级集聚.
+
+另外，在实际应用当中，我们常常做放缩$D_{\mathrm{B}}(p+\de \| p) \ge 2\de^2$. 这个放缩在$p \approx \frac 12$时较为接近，而在$p\approx 0$或$1$时较为松弛.
+
+Chernoff界还有一个著名的推广：
+\begin{theorem} （Heoffding不等式）
+    设随机变量$X_1, X_2, \cdots$ 两两独立，满足$X_i\in [a_i, b_i]$ （其中$-\infty < a_i < b_i < \infty$）. 记$p_i = \E[X_i]$，$p = \frac{1}{n}\sum_i p_i$，则对于任意$\de > 0$
+    \[
+    \Pr\left[
+        \abs{
+            \dfrac 1n \sum_{i=1}^n X_i - p
+        } \ge \de
+    \right] \le \exp\left\{
+        \dfrac{2n^2\de^2}{\sum_{i=1}^n {(b_i - a_i)}^2}
+    \right\}
+    \]
+\end{theorem}
+
+值得强调的是，\textbf{独立}是集中不等式成立的重要条件，如果没有该条件（例如取$X_1 = X_2 = \cdots$）那么平均分布就是原分布，并不会出现“集中”性的表现.
+
+\section{一则应用与推广}
+
+考虑这样一个场景：有$N$个比特（可考虑成球），$a_1, a_2, \dots, a_N$ ($a_i \in \{0, 1\}$). 现在希望随机抽取$n$次，我们有两种抽取方式：有放回(draw with replacement)和无放回(draw without replacement). 我们记有放回的结果为$X_1, \dots, X_n$；无放回的结果为$Y_1, \dots, Y_n$. 
+
+对于有放回的情形$\{X_i\}$，每次抽取都是独立同分布的Bernoulli采样，因此可以归约到Chernoff界. 但对于无放回的情形$\{Y_i\}$，还有没有集中不等式呢？注意到这里我们打破了独立这一条件，$\{Y_i\}$之间应该是负相关的（直觉上也是容易想见的）.
+
+不妨来比较$\{X_i\}$和$\{Y_i\}$的收敛情况，用一步Chernoff不等式，我们实际上希望比较
+\[
+\E\left[
+    e^{t(X_1 + \cdots + X_n)}
+\right] \quad \text{和} \quad 
+\E\left[
+    e^{t(Y_1 + \cdots + Y_n)}
+\right]
+\]
+
+可以证明右式是小于等于左式的，意味着$\{Y_i\}$有着更强的集中（收敛）性. 具体细节太繁琐了，以下是证明的大致思路：
+\[
+\E\left[
+    e^{t(X_1 + \cdots + X_n)}
+\right] = 
+1 + t \sum_{i} \E[X_i] + \dfrac{t^2}{2} \sum_{i,j} \E[X_i X_j] + \dfrac{t^3}{6} \sum_{i,j,k} \E[X_i X_j X_k] + \cdots
+\]
+\[
+\E\left[
+    e^{t(Y_1 + \cdots + Y_n)}
+\right] = 
+1 + t \sum_{i} \E[Y_i] + \dfrac{t^2}{2} \sum_{i,j} \E[Y_i Y_j] + \dfrac{t^3}{6} \sum_{i,j,k} \E[Y_i Y_j Y_k] + \cdots
+\]
+
+零阶和一阶项都是一样的，来关注二阶项. 其中形如$\E[X_i^2]$和$\E[Y_i^2]$的项是一样的，故只需比较 
+\[
+\sum_{i<j}\E[X_i X_j] \quad \text{和} \quad 
+\sum_{i<j}\E[Y_i Y_j]
+\]
+
+而对于任意的$i<j$都有 
+\begin{align*}
+    \E[Y_i Y_j] = \Pr[Y_i=1, Y_j=1] = \Pr[Y_i=1] \Pr[Y_j=1|Y_i=1] \\
+    \le \Pr[Y_i=1] \Pr[Y_j=1] = \Pr[X_i=1] \Pr[X_j=1] = \E[X_i X_j]
+\end{align*}
+
+于是便可以证明原不等式，进而给出了$\{Y_i\}$的集中不等式. 
