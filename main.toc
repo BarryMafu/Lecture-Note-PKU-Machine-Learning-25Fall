@@ -1,7 +1,0 @@
-\contentsline {chapter}{\numberline {第一章\hspace {.3em}}集中不等式}{1}{chapter.1}%
-\contentsline {section}{\numberline {1.1}前置数学知识}{1}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Chernoff界诱导的集中不等式}{3}{section.1.2}%
-\contentsline {section}{\numberline {1.3}一则应用与推广}{6}{section.1.3}%
-\contentsline {chapter}{\numberline {第二章\hspace {.3em}}关于泛化的VC理论}{7}{chapter.2}%
-\contentsline {section}{\numberline {2.1}机器学习的数学描述}{7}{section.2.1}%
-\contentsline {section}{\numberline {2.2}有限大假设空间下的结果}{8}{section.2.2}%
