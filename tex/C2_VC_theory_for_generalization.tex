@@ -239,6 +239,13 @@ N^{\ca F}(m) := \max_{z_1 ,\dots, z_m} N^{\ca F}(z_1, \dots, z_m)
         \mathrm{sgn}(\bd{w}^T\cdot \bd{x} + b): \bd{w}\in \R^d, b\in \R 
     \right\}
     \]
+    其中$\mathrm{sgn}(\cdot)$是符号函数，定义为 
+    \[
+    \mathrm{sgn}(z) = \begin{cases}
+    1 & ,z > 0\\
+    -1 & ,z \le 0
+    \end{cases}
+    \]
 
-    试证明：$\ca F$的VC维度是$d+1$.
+    试证明：$\ca F$的VC维度是$d+1$. 
 \end{exercise}

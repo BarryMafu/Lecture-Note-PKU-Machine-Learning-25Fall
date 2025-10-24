@@ -55,9 +55,67 @@ f(t) = \dfrac{1}{\sqrt{2\pi}} \cdot \dfrac{e^{-t^2/2}}{t}
     记 
     \[
     \ca F = \left\{
-        \mathrm{sgn}(\bd{w}^T\cdot \bd{x} + b): \bd{w}\in \R^d, b\in \R 
+        \mathrm{sgn}(\bd{w}^{\top}\cdot \bd{x} + b): \bd{w}\in \R^d, b\in \R 
     \right\}
+    \]
+    其中$\mathrm{sgn}(\cdot)$是符号函数，定义为 
+    \[
+    \mathrm{sgn}(z) = \begin{cases}
+    1 & ,z > 0\\
+    -1 & ,z \le 0
+    \end{cases}
     \]
 
     试证明：$\ca F$的VC维度是$d+1$.
 \end{exercise}
+
+\begin{proof}
+记$f_{\bd{w}, b}(\bd{x}) = \mathrm{sgn}(\bd{w}^\top \cdot \bd{x} + b) \in \ca F$. 我们分两部分来证明：
+\begin{enumerate}
+    \item[\Circled{1}] 现取一组$\bd{x}_1, \dots, \bd{x}_{d+1}$使得其可以在$\ca F$下取到任意$d+1$维比特串. 令
+    \begin{align*}
+        \bd{x}_1 & = {(1, 0, \dots, 0, 0)}^\top \\
+        \bd{x}_2 & = {(0, 1, \dots, 0, 0)}^\top \\
+                & \vdots \\
+        \bd{x}_d & = {(0, 0, \dots, 0, 1)}^\top \\
+        \bd{x}_{d+1} & = {(0, 0, \dots, 0, 0)}^\top
+    \end{align*}
+    
+    那么对于任意的$\bd{y} = (y_1, \dots, y_{d+1}) \in \{\pm 1\}^{d+1}$，取 
+    \[
+    \bd{w}_0 = 2\bd{y}_{1:d}^\top = {(2y_1, \dots, 2y_{d})}^\top, \quad b_0 = y_{d+1}
+    \]
+
+    则由于$\bd{y}$的各个元素取值于$\{\pm 1\}$，不难证明
+    \begin{align*}
+        f_{\bd{w}_0, b_0}(\bd{x}_j) & = \mathrm{sgn}(\bd{w}_0^\top \bd{x}_j+ b_0) = \mathrm{sgn}(2y_j + y_{d+1}) = y_j &, j=1,\dots,d \\
+        f_{\bd{w}_0, b_0}(\bd{x}_{d+1}) & = \mathrm{sgn}(\bd{w}_0^\top \bd{0}+ b_0) = \mathrm{sgn}(y_{d+1}) = y_{d+1}
+    \end{align*}
+    
+    至此我们说明对于任意$d+1$维比特串，都存在$f\in \ca F$使得$(\bd{x}_1, \dots, \bd{x}_{d+1})$在$f$的像是该比特串. 
+
+    \item[\Circled{2}] 对于任意$\bd{x}_1, \dots, \bd{x}_{d+2}$，往证明一定有其取不到的比特串，不妨假设这些向量没有完全相同的，否则易证. 再不妨假设$\bd{x}_1, \dots, \bd{x}_{d+2}$均是在$d$维空间中的向量，可不妨假设$\bd{x}_1, \dots, \bd{x}_{d+1}$都不是零向量，那么根据向量空间基本定理可知这些向量线性相关，即存在一组不全为零的实数$\ld_1, \dots, \ld_{d+1}$使得 
+    \[
+    \sum_{j=1}^{d+1} \ld_j \cdot \bd{x}_j = \bd{0}
+    \]
+
+    现在任取$\bd{w}\in \R^d, b\in \R$，我们知道 
+    \begin{equation} \label{eq:hw2-1}
+    \sum_{j=1}^{d+1} \ld_j \cdot \big(\bd{w}^{\top}\bd{x}_j + b\big) = b \cdot \sum_{j=1}^{d+1} \ld_j
+    \end{equation}
+
+    因此，若$b\cdot\sum \ld_j > 0$，则以下式子不可能取到（否则\hyperref[eq:hw2-1]{A.1式}左侧$\le 0$）
+    \[
+    \big(f_{\bd{w},b}(\bd{x}_1), \dots, f_{\bd{w},b}(\bd{x}_{d+1})\big) = \big(-\mathrm{sgn}(\ld_1), \dots, -\mathrm{sgn}(\ld_{d+1})\big)
+    \]
+
+    而若$b\cdot\sum \ld_j \le 0$，则以下式子不可能取到（否则\hyperref[eq:hw2-1]{A.1式}左侧$>0$）
+    \[
+    \big(f_{\bd{w},b}(\bd{x}_1), \dots, f_{\bd{w},b}(\bd{x}_{d+1})\big) = \big(\mathrm{sgn}(\ld_1), \dots, \mathrm{sgn}(\ld_{d+1})\big)
+    \] 
+    
+    至此我们说明了一定存在取不到的$d+2$维比特串.
+    
+\end{enumerate}
+综上所述，我们证明了$\ca F$的VC维度是$d+1$.
+\end{proof}
