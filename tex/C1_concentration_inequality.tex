@@ -180,7 +180,7 @@ Chebyshev仅使用了二阶矩的信息，得到的结果太松弛了. 而CLT利
 \end{definition}
 
 有了这个定义，我们可以将\textbf{定理\ref{thm:bernoulli}}定量地写成 
-\begin{theorem} （Chernoff）
+\begin{theorem} （Chernoff） \label{thm:chernoff}
     随机变量$X, X_1, X_2, \cdots$ i.i.d.服从Bernoulli分布$B(1,p)$，则对于任意$\de > 0$ 
     \[
     \Pr\left[
@@ -240,7 +240,7 @@ Chernoff界还有一个著名的推广：
 
 值得强调的是，\textbf{独立}是集中不等式成立的重要条件，如果没有该条件（例如取$X_1 = X_2 = \cdots$）那么平均分布就是原分布，并不会出现“集中”性的表现.
 
-\section{一则应用与推广}
+\section{一则应用与推广} \label{sec:draw-without-replacement}
 
 考虑这样一个场景：有$N$个比特（可考虑成球），$a_1, a_2, \dots, a_N$ ($a_i \in \{0, 1\}$). 现在希望随机抽取$n$次，我们有两种抽取方式：有放回(draw with replacement)和无放回(draw without replacement). 我们记有放回的结果为$X_1, \dots, X_n$；无放回的结果为$Y_1, \dots, Y_n$. 
 
