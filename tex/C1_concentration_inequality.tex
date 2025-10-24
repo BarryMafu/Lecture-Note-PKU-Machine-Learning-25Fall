@@ -27,7 +27,7 @@
     \]
 \end{theorem}
 
-布置了练习
+布置了练习：
 \begin{exercise} \label{exr:taildistrib}
 已知随机变量$X \sim \mathcal{N}(0, 1)$，定义 
 \[
@@ -35,45 +35,6 @@
 \]
 可以证明$\Phi$并不是初等函数，现求一个初等函数$f \sim \Phi$，即二者渐进等价。
 \end{exercise}
-
-\textbf{分析} \quad 先分析一下这个问题：显然$\Phi(t) \ra 0$，所以要$f \ra 0$. 现在$\Phi$的形式非初等不便于分析，不妨考虑$\Phi'(t) = \varphi(t)$，为此可以运用L'Hospital法则：
-\[
-\lim_{t \ra +\infty} \dfrac{\Phi(t)}{f(t)} = \lim_{t \ra +\infty} \dfrac{\Phi'(t)}{f'(t)} = \lim_{t \ra +\infty} \dfrac{-C e^{-t^2/2}}{f'(t)}
-\]
-其中$C$是某常数. 我们希望$f \sim \Phi$，也就是上述极限为1， 所以为了化简，我们希望$f'(t)$中也出现$e^{-t^2/2}$的形式. 回忆到 
-\[
-v(x)e^{u(x)} = \Big(v'(x) + u'(x)v(x) \Big) \cdot e^{u(x)}
-\]
-因此我们不妨设$f(t)$形如$g(t) e^{-t^2/2}$，此时
-\[
-\lim_{t \ra +\infty} \dfrac{-C e^{-t^2/2}}{f'(t)}
-= \lim_{t \ra +\infty} \dfrac{-C e^{-t^2/2}}{\big[g'(t) - tg(t)\big] \cdot e^{-t^2/2}} = \lim_{t \ra +\infty}\dfrac{-C}{g'(t) - tg(t)}
-\]
-欲使上式为1，就要
-\[
-\lim_{t\ra +\infty}  tg(t) - g'(t) = \dfrac{1}{C}
-\]
-简便起见只考虑$C=1$，之后再给$g$乘上系数. 注意！这里千万不要把其当作$-g'(t) + tg(t) = 1$这样的一阶线性常微分方程求解，因为其解不保证初等. 如果你尝试求解ODE会发现解得$f = \Phi$确实不初等. 在这里，我们只需要考虑到$t \ra +\infty$，所以我们令$g(t) = t^{-1}$即合意.
-
-\begin{solution}
-构造初等函数 
-\[
-f(t) = \dfrac{1}{\sqrt{2\pi}} \cdot \dfrac{e^{-t^2/2}}{t}
-\]
-根据L'Hospital法则，可以验证
-\[
-\lim_{t\ra +\infty} \dfrac{\Phi(t)}{f(t)} = \lim_{t \ra +\infty} \dfrac{\Phi'(t)}{f'(t)} = \lim_{t \ra +\infty} \dfrac{-e^{-t^2/2}}{\left(-\dfrac{1}{t^2} - t\cdot \dfrac{1}{t}\right) e^{-t^2/2}} = \lim_{t\ra \infty}\dfrac{1+t^2}{t^2} = 1
-\]
-因此$f$和$\Phi$渐进等价. 
-\end{solution}
-
-事实上，我们上面给出的是 Mills 渐近展开的首项，完整的是：
-\[
-\Phi(t) \sim \dfrac{1}{\sqrt{2\pi}} \cdot {e^{-\frac{t^2}{2}}}
-\cdot \left(
-    \dfrac{1}{t} - \dfrac{1}{t^3} + \dfrac{1 \cdot 3}{x^5} - \dfrac{1 \cdot 3 \cdot 5}{x^7} + \cdots
-\right)
-\]
 
 \begin{corollary}（Markov不等式推论）
     随机变量$X$，其矩$\E[X], \E[X^2], \dots, \E[X^r]$均存在，则对于任意$k \ge 0$，都有 

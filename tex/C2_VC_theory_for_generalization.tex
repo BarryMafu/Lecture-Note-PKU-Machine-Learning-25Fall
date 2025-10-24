@@ -213,5 +213,32 @@ N^{\ca F}(m) := \max_{z_1 ,\dots, z_m} N^{\ca F}(z_1, \dots, z_m)
 
 下面正式给出VC维度的定义
 \begin{definition} （VC维度）
-    
+    我们称$d$为假设空间$\ca F$的VC维度(dimension)，如果存在$x_1, \dots, x_d$使得 
+    \[
+    \Big\vert
+        \big\{
+            (f(x_1), \dots, f(x_d)): f \in \ca F  
+        \big\}
+    \Big\vert = 2^d
+    \]
+    但对于任意的$x_1, \dots, x_{d+1}$都有 
+    \[
+    \Big\vert
+        \big\{
+            (f(x_1), \dots, f(x_{d+1})): f \in \ca F  
+        \big\}
+    \Big\vert < 2^{d+1}
+    \]
 \end{definition}
+
+不妨通过一个例子来感受，该例子成为了习题，详见\textbf{附录\ref{chap:homework}}：
+\begin{exercise}
+    记 
+    \[
+    \ca F = \left\{
+        \mathrm{sgn}(\bd{w}^T\cdot \bd{x} + b): \bd{w}\in \R^d, b\in \R 
+    \right\}
+    \]
+
+    试证明：$\ca F$的VC维度是$d+1$.
+\end{exercise}
